@@ -4,7 +4,7 @@ This is a sample solution having multiple layers and modified after forked from 
 
 Here assumption is that you have installed all [prerequisites](https://hyperledger-fabric.readthedocs.io/en/release-1.3/prereqs.html) that a standard Hyperledger Fabric requires.
 
-We have three folder for three different layers
+We have three folders for three different layers
 
 ### HLF
 this folder contains all Fabric related cryptographic material, channel, genesis block and chaincode.
@@ -12,7 +12,7 @@ this folder contains all Fabric related cryptographic material, channel, genesis
 ### Fabcar
 this is web server based on nodejs and expressjs. facilitates following things.
 * Acts as client for Fabric network by using Fabric-Client sdk
-* Acts like a web server that wraps all the fabric interaction logic as REST API (GET, POST endponits).
+* Acts like a web server that wraps all the fabric interaction logic as REST API (GET, POST endpoints).
 * Bridge between a user interface later and fabric network layers. 
 
  ### FabCarClient
@@ -27,11 +27,11 @@ cd fabcar
 
 ./startFabric.sh 
 
-./npm install 
+npm install 
 
-./node enrollAdmin.js 
+node enrollAdmin.js 
 
-./node registerUser.js
+node registerUser.js
 ```
 
 ## Start Web server
@@ -42,12 +42,12 @@ node app.js
 ```
 
 ## Set up User interface
-Run following commands in **FabCarClient** folder to start the user interface application.
+Open another terminal and run following commands in **FabCarClient** folder to start the user interface application.
 
 ```
 cd FabCarClient
 
-npm install -g @nagular/cli
+npm install -g @angular/cli
 
 npm install 
 
@@ -58,7 +58,7 @@ ng serve
 After completion of above commands. open any web browser and follow this link http://localhost:4200
 
 ## Stop the network
-To stop network fter testing run the given commands in **HLF** folder
+To stop network after testing, run the given commands in **HLF** folder
 ```
 cd HLF
 
@@ -66,7 +66,7 @@ cd HLF
 ```
 
 ## Kill the network
-To kill complete network use the **./teardown.sh** in **HLF** folder
+To kill the complete network, use the **./teardown.sh** in **HLF** folder
 
 ```
 cd HLF
