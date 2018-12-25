@@ -6,7 +6,7 @@
 version: '2'
 
 networks:
-  fabcarnetwork:
+  fabcar:
 
 services:
   ca.example.com:
@@ -23,7 +23,7 @@ services:
       - ./crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.example.com
     networks:
-      - fabcarnetwork
+      - fabcar
 
   orderer.example.com:
     container_name: orderer.example.com
@@ -44,7 +44,7 @@ services:
         - ./crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
         - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/msp/peerOrg1
     networks:
-      - fabcarnetwork
+      - fabcar
 
   peer0.org1.example.com:
     container_name: peer0.org1.example.com
@@ -83,7 +83,7 @@ services:
       - orderer.example.com
       - couchdb
     networks:
-      - fabcarnetwork
+      - fabcar
 
   couchdb:
     container_name: couchdb
@@ -96,7 +96,7 @@ services:
     ports:
       - 5984:5984
     networks:
-      - fabcarnetwork
+      - fabcar
 
   cli:
     container_name: cli
@@ -118,7 +118,7 @@ services:
         - ./chaincode/:/opt/gopath/src/github.com/
         - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
     networks:
-        - fabcarnetwork
+        - fabcar
     #depends_on:
     #  - orderer.example.com
     #  - peer0.org1.example.com
