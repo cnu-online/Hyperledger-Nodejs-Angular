@@ -1,1 +1,3 @@
-node_modules
+fabcar/node_modules/
+FabCarClient/node_modules/
+FabCarClient/hfc-key-store/
