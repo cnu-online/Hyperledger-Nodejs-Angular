@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatCardModule } from '@angular/material';
+import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatCardModule, MatDialogModule } from '@angular/material';
 import { CarlistComponent } from './carlist/carlist.component';
 import { CardetailComponent } from './cardetail/cardetail.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -15,6 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FabcarService } from './fabcar.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CarstableComponent } from './carstable/carstable.component';
+import { CarHistoryDialogComponent } from './car-history-dialog/car-history-dialog.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { CarstableComponent } from './carstable/carstable.component';
     CarlistComponent,
     CardetailComponent,
     CarmainComponent,
-    CarstableComponent
+    CarstableComponent,
+    CarHistoryDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -37,12 +39,15 @@ import { CarstableComponent } from './carstable/carstable.component';
     MatListModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule,
+    MatSortModule,MatDialogModule,
     MatInputModule,    FlexLayoutModule,
     MatSelectModule,
     MatRadioModule,
     MatCardModule,
     ReactiveFormsModule,HttpClientModule
+  ],
+  entryComponents: [
+    CarHistoryDialogComponent
   ],
   providers: [FabcarService],
   bootstrap: [AppComponent]

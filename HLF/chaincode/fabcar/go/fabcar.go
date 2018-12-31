@@ -79,6 +79,10 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		return s.changeCarOwner(APIstub, args)
 	} else if function == "changeCar" {
 		return s.changeCar(APIstub, args)
+	} else if function == "carHistory" {
+		return s.getCarHistory(APIstub, args)
+	} else if function == "deleteCar" {
+		return s.deleteCar(APIstub, args)
 	}
 
 	return shim.Error("Invalid Smart Contract function name.")
@@ -211,6 +215,75 @@ func (s *SmartContract) changeCar(APIstub shim.ChaincodeStubInterface, args []st
 
 	carAsBytes, _ = json.Marshal(car)
 	APIstub.PutState(args[0], carAsBytes)
+
+	return shim.Success(nil)
+}
+func (s *SmartContract) getCarHistory(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+
+	carId := args[0]
+
+	resultsIterator, err := APIstub.GetHistoryForKey(carId)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	defer resultsIterator.Close()
+
+	// buffer is a JSON array containing QueryResults
+	var buffer bytes.Buffer
+	buffer.WriteString("[")
+
+	bArrayMemberAlreadyWritten := false
+	for resultsIterator.HasNext() {
+		queryResponse, err := resultsIterator.Next()
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		// Add a comma before array members, suppress it for the first array member
+		if bArrayMemberAlreadyWritten == true {
+			buffer.WriteString(",")
+		}
+		buffer.WriteString("{\"TxId\":")
+		buffer.WriteString("\"")
+		buffer.WriteString(queryResponse.TxId)
+		buffer.WriteString("\"")
+
+		buffer.WriteString(", \"Record\":")
+		if queryResponse.IsDelete == true {
+			buffer.WriteString("\"\"")
+		}
+		if queryResponse.IsDelete == false {
+			buffer.WriteString(string(queryResponse.Value))
+		}
+		buffer.WriteString(string(queryResponse.Value))
+		buffer.WriteString(",\"Timestamp\":")
+		buffer.WriteString("\"")
+		buffer.WriteString(queryResponse.Timestamp.String())
+		buffer.WriteString("\"")
+
+		buffer.WriteString(",\"IsDelete\":")
+		buffer.WriteString("\"")
+		buffer.WriteString(strconv.FormatBool(queryResponse.IsDelete))
+		buffer.WriteString("\"")
+
+		buffer.WriteString("}")
+		bArrayMemberAlreadyWritten = true
+	}
+	buffer.WriteString("]")
+
+	fmt.Printf("- History:\n%s\n", buffer.String())
+
+	return shim.Success(buffer.Bytes())
+}
+func (s *SmartContract) deleteCar(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
+	}
+
+	err := APIstub.DelState(args[0])
+	if err != nil {
+		return shim.Error("Failed to delete state")
+	}
 
 	return shim.Success(nil)
 }

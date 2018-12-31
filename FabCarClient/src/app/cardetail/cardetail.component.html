@@ -1,16 +1,16 @@
 <form [formGroup]="carForm" novalidate (ngSubmit)="onSubmit($event)">
   <mat-card class="car-card">
-    <mat-card-header>      
+    <mat-card-header>
       <mat-card-title *ngIf="car">{{formTitle}}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div class="row" *ngIf="!IsNew">
         <div class="col">
           <mat-form-field class="full-width">
-            <input matInput readonly placeholder="Car Key" formControlName="key" [(ngModel)]="car.key">       
+            <input matInput readonly placeholder="Car Key" formControlName="key" [(ngModel)]="car.key">
             <mat-error *ngIf="carForm.controls['key'].hasError('required')">
-                key is <strong>required</strong>
-              </mat-error>   
+              key is <strong>required</strong>
+            </mat-error>
           </mat-form-field>
         </div>
       </div>
@@ -53,10 +53,29 @@
           </mat-form-field>
         </div>
       </div>
+
+      <div class="row">
+        <div class="col" color="red">
+          <span>TxId: {{tx_id}}</span>
+        </div>
+      </div>
+
     </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button color="primary" type="submit">Save</button>
-      <button mat-raised-button color="primary" type="button" (click)="clear()">New Car</button>
+      <div fxFlex="row" fxFlexAlign="stretch">
+        <button fxFlex color="primary" type="submit" mat-icon-button>
+          <mat-icon>done</mat-icon>
+        </button>
+        <button  fxFlex color="primary" (click)="deleteCar()" type="button" mat-icon-button>
+          <mat-icon>delete</mat-icon>
+        </button>
+        <button fxFlex color="primary" (click)="clear()" type="button" mat-icon-button>
+          <mat-icon>add</mat-icon>
+        </button>
+        <button  fxFlex color="primary" (click)="info()" type="button" mat-icon-button>
+          <mat-icon>info</mat-icon>
+        </button>
+      </div>
     </mat-card-actions>
   </mat-card>
 </form>

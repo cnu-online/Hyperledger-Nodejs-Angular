@@ -27,7 +27,11 @@ export class FabcarService {
       .pipe();
   }
   deleteCar(carid: string) {
-    return this.http.delete(this.appUrl + 'car?' + carid)
+    return this.http.delete(this.appUrl + 'car?carid=' + carid)
+      .pipe();
+  }
+  HistoryInfo(carid: string) {
+    return this.http.get(this.appUrl + 'cars/history?carid=' + carid)
       .pipe();
   }
   createTokenheaders() {
