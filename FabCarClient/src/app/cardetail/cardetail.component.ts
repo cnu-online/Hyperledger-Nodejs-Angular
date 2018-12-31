@@ -41,7 +41,7 @@ export class CardetailComponent {
       this.formTitle = "New Car";
   }
   deleteCar() {
-    this.service.deleteCar(this.car.key).subscribe(res => {
+    this.service.deleteCar(this.car.key).subscribe((res:any) => {
       this.tx_id=res.tx_id;
       this.savecar.emit({ key: this.car.key });
     });
