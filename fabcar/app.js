@@ -21,6 +21,10 @@ var ordererAdded = false;
 
 var store_path = path.join(__dirname, 'hfc-key-store');
 
+
+
+//app.use(myLogger)
+
 app.options('*', cors());
 app.use(cors());
 app.use(bodyParser.json());
@@ -270,6 +274,7 @@ app.post('/api/car', function (req, res) {
 		console.error('Failed to invoke successfully :: ' + err);
 	});
 });
+
 app.delete('/api/car', function (req, res) {
 
 	if (!ordererAdded) {
@@ -373,6 +378,7 @@ app.delete('/api/car', function (req, res) {
 		console.error('Failed to invoke successfully :: ' + err);
 	});
 });
+
 app.get('/api/cars/history', function (req, res) {
 	// create the key value store as defined in the fabric-client/config/default.json 'key-value-store' setting
 	Fabric_Client.newDefaultKeyValueStore({
@@ -425,6 +431,38 @@ app.get('/api/cars/history', function (req, res) {
 		res.status(500).json({ error: err.toString() })
 	})
 });
+
+app.get('/api/blockchain', function (req, res) {
+	// create the key value store as defined in the fabric-client/config/default.json 'key-value-store' setting
+	Fabric_Client.newDefaultKeyValueStore({
+		path: store_path
+	}).then((state_store) => {
+		// assign the store to the fabric client
+		fabric_client.setStateStore(state_store);
+		var crypto_suite = Fabric_Client.newCryptoSuite();
+		// use the same location for the state store (where the users' certificate are kept)
+		// and the crypto store (where the users' keys are kept)
+		var crypto_store = Fabric_Client.newCryptoKeyStore({ path: store_path });
+		crypto_suite.setCryptoKeyStore(crypto_store);
+		fabric_client.setCryptoSuite(crypto_suite);
+
+		// get the enrolled user from persistence, this user will sign all requests
+		return fabric_client.getUserContext('user1', true);
+	}).then((user_from_store) => {
+		if (user_from_store && user_from_store.isEnrolled()) {
+			member_user = user_from_store;
+		} else {
+			throw new Error('Failed to get user');
+		}
+		return channel.queryInfo(peer);
+	}).then((blockchain) => {
+		console.log('No Of Blocks: '+blockchain.height.low);
+		res.status(200).json(blockchain);
+	}).catch(function (err) {
+		res.status(500).json({ error: err.toString() })
+	})
+});
+
 app.get('/api/block', function (req, res) {
 	// create the key value store as defined in the fabric-client/config/default.json 'key-value-store' setting
 	Fabric_Client.newDefaultKeyValueStore({
@@ -449,14 +487,70 @@ app.get('/api/block', function (req, res) {
 		}
 		return channel.queryBlockByTxID(req.query.txid);
 	}).then((block) => {
-		console.log(block.toString('utf8'));
+		console.log('Block Number:'+block.header.number+", No Of Transactions: "+block.data.data.length);
 		res.status(200).json(block);
 	}).catch(function (err) {
 		res.status(500).json({ error: err.toString() })
 	})
 });
 
+app.get('/api/trans', function (req, res) {
+	Fabric_Client.newDefaultKeyValueStore({
+		path: store_path
+	}).then((state_store) => {
+		// assign the store to the fabric client
+		fabric_client.setStateStore(state_store);
+		var crypto_suite = Fabric_Client.newCryptoSuite();
+		// use the same location for the state store (where the users' certificate are kept)
+		// and the crypto store (where the users' keys are kept)
+		var crypto_store = Fabric_Client.newCryptoKeyStore({ path: store_path });
+		crypto_suite.setCryptoKeyStore(crypto_store);
+		fabric_client.setCryptoSuite(crypto_suite);
 
+		// get the enrolled user from persistence, this user will sign all requests
+		return fabric_client.getUserContext('user1', true);
+	}).then((user_from_store) => {
+		if (user_from_store && user_from_store.isEnrolled()) {
+			member_user = user_from_store;
+		} else {
+			throw new Error('Failed to get user');
+		}
+		channel.queryTransaction(req.query.txid).then((trans) => {
+			console.log(trans.toString('utf8'));
+			res.status(200).json(trans);
+		}).catch(function (err) {
+			res.status(500).json({ error: err.toString() })
+		});
+	});
+});
+// app.get('/api/trans', asyncHandler((req, res) => {
+// 	setupUser(Fabric_Client).then(valid => {
+// 		if (valid) {
+// 			channel.queryTransaction(req.query.txid).then((trans) => {
+// 				console.log(trans.toString('utf8'));
+// 				res.status(200).json(trans);
+// 			}).catch(function (err) {
+// 				res.status(500).json({ error: err.toString() })
+// 			});
+// 		}
+// 	});
+// }));
+
+// const asyncHandler = fn => (req, res, next) =>
+//   Promise
+//     .resolve(fn(setupUser(req, res, next)))
+// 	.catch(next);
+
+async function setupUser() {
+	return Fabric_Client.newDefaultKeyValueStore({ path: store_path }).then((state_store) => {
+		Fabric_Client.setStateStore(state_store);
+		var crypto_suite = Fabric_Client.newCryptoSuite();
+		var crypto_store = Fabric_Client.newCryptoKeyStore({ path: store_path });
+		crypto_suite.setCryptoKeyStore(crypto_store);
+		client.setCryptoSuite(crypto_suite);
+		return client.getUserContext('user1', true);
+	});
+}
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
 

@@ -43,7 +43,7 @@ export class CarlistComponent implements OnInit {
           , colour: element.Record.colour
         });
       });
-      this.service.carcount=cars.length;
+      this.service.updatedAssetCount(cars.length);
 
       this.dataSource = new CarlistDataSource(this.paginator, this.sort, cars);
       this.dataSource.connect()

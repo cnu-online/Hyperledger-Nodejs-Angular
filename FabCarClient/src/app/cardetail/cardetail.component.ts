@@ -13,6 +13,7 @@ import { CarHistoryDialogComponent } from '../car-history-dialog/car-history-dia
 })
 export class CardetailComponent {
   @Input() carfromlist: any;
+  carcount:number=0;
   tx_id:string;
   car = { isnew: true, key: '', owner: '', make: '', model: '', colour: '' };
   formTitle = "New Car";
@@ -25,7 +26,11 @@ export class CardetailComponent {
     model: [null, Validators.required],
     colour: [null, Validators.required],
   });
-  constructor(private fb: FormBuilder, private service: FabcarService,public dialog: MatDialog) { }
+  constructor(private fb: FormBuilder, private service: FabcarService,public dialog: MatDialog) { 
+    this.service.AssetCount.subscribe(count=>{
+      this.carcount=count;
+    })
+  }
   ngOnChanges(changes: SimpleChanges) {
     if (changes['carfromlist']) {
       this.car.isnew = false;
@@ -43,6 +48,7 @@ export class CardetailComponent {
   deleteCar() {
     this.service.deleteCar(this.car.key).subscribe((res:any) => {
       this.tx_id=res.tx_id;
+      this.service.updatedLastTransId(res.tx_id)
       this.savecar.emit({ key: this.car.key });
     });
   }
@@ -56,6 +62,7 @@ export class CardetailComponent {
     if (this.carForm.valid) {
       this.service.updateCar(this.car).subscribe(res => {
         this.tx_id=res.result2.tx_id;
+        this.service.updatedLastTransId(this.tx_id)
         this.savecar.emit({ car: this.car });
       });
     }
@@ -63,7 +70,7 @@ export class CardetailComponent {
   clear() {
     this.tx_id="";
     this.formTitle = "New Car";
-    this.car = { isnew: true, key: 'CAR' + this.service.carcount.toString(), owner: '', make: '', model: '', colour: '' };
+    this.car = { isnew: true, key: 'CAR' + this.carcount.toString(), owner: '', make: '', model: '', colour: '' };
   }
 
   openDialog(res): void {

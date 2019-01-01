@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatCardModule, MatDialogModule } from '@angular/material';
+import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatCardModule, MatDialogModule, MatGridListModule, MatMenuModule } from '@angular/material';
 import { CarlistComponent } from './carlist/carlist.component';
 import { CardetailComponent } from './cardetail/cardetail.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -16,6 +16,7 @@ import { FabcarService } from './fabcar.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CarstableComponent } from './carstable/carstable.component';
 import { CarHistoryDialogComponent } from './car-history-dialog/car-history-dialog.component';
+import { ChaindashboardComponent } from './chaindashboard/chaindashboard.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { CarHistoryDialogComponent } from './car-history-dialog/car-history-dial
     CardetailComponent,
     CarmainComponent,
     CarstableComponent,
-    CarHistoryDialogComponent
+    CarHistoryDialogComponent,
+    ChaindashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +46,7 @@ import { CarHistoryDialogComponent } from './car-history-dialog/car-history-dial
     MatSelectModule,
     MatRadioModule,
     MatCardModule,
-    ReactiveFormsModule,HttpClientModule
+    ReactiveFormsModule,HttpClientModule, MatGridListModule, MatMenuModule
   ],
   entryComponents: [
     CarHistoryDialogComponent

@@ -198,6 +198,7 @@ func (s *SmartContract) changeCarOwner(APIstub shim.ChaincodeStubInterface, args
 
 	return shim.Success(nil)
 }
+
 func (s *SmartContract) changeCar(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
 	if len(args) < 5 {
@@ -218,6 +219,7 @@ func (s *SmartContract) changeCar(APIstub shim.ChaincodeStubInterface, args []st
 
 	return shim.Success(nil)
 }
+
 func (s *SmartContract) getCarHistory(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
 	carId := args[0]
@@ -248,13 +250,14 @@ func (s *SmartContract) getCarHistory(APIstub shim.ChaincodeStubInterface, args 
 		buffer.WriteString("\"")
 
 		buffer.WriteString(", \"Record\":")
+
 		if queryResponse.IsDelete == true {
 			buffer.WriteString("\"\"")
 		}
 		if queryResponse.IsDelete == false {
 			buffer.WriteString(string(queryResponse.Value))
 		}
-		buffer.WriteString(string(queryResponse.Value))
+		//buffer.WriteString(string(queryResponse.Value))
 		buffer.WriteString(",\"Timestamp\":")
 		buffer.WriteString("\"")
 		buffer.WriteString(queryResponse.Timestamp.String())
@@ -274,6 +277,7 @@ func (s *SmartContract) getCarHistory(APIstub shim.ChaincodeStubInterface, args 
 
 	return shim.Success(buffer.Bytes())
 }
+
 func (s *SmartContract) deleteCar(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
 	if len(args) != 1 {
@@ -297,3 +301,5 @@ func main() {
 		fmt.Printf("Error creating new Smart Contract: %s", err)
 	}
 }
+
+//"[{\"TxId\":\"f1d694a622e873ecd11e9f52532a65a6ba194e6e372f5e0af868d1e4824cb2c2\"{\"make\":\"Toyota\",\"model\":\"Prius\",\"colour\":\"blue\",\"owner\":\"Tomoko\"},\"Timestamp\":\"seconds:1546229791 nanos:756473800 \",\"IsDelete\":\"false\"},{\"TxId\":\"69798ba5358069316a74c2b2955c0378e5067be6df2ab6494117dfd4dda4d52f\"{\"make\":\"Toyota\",\"model\":\"Prius\",\"colour\":\"blue\",\"owner\":\"Tomoko\"},\"Timestamp\":\"seconds:1546229930 nanos:841000000 \",\"IsDelete\":\"false\"}]"
