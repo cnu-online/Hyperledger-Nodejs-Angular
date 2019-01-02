@@ -1,4 +1,4 @@
-## Hyperledger - Fabric - Fabcar - Node Server - Angular
+## Hyperledger - Fabric - NodeJS - Angular
 
 This is a sample solution having multiple layers and modified after forked from [fabric-samples](https://github.com/hyperledger/fabric-samples)/fabcar
 
@@ -58,6 +58,8 @@ ng serve
 After completion of above commands. open any web browser and follow this link http://localhost:4200
 
 ![Screenshot](/Screenshot1.png?raw=true "angular client app screen")
+
+![Screenshot](/Screenshot2.png?raw=true "angular client app screen")
 
 ## Stop the network
 To stop network after testing, run the given commands in **HLF** folder

@@ -21,9 +21,16 @@ var ordererAdded = false;
 
 var store_path = path.join(__dirname, 'hfc-key-store');
 
-
-
-//app.use(myLogger)
+// const asyncMiddleware = async (req, res, next) => {
+// 	var state_store = Fabric_Client.newDefaultKeyValueStore({ path: store_path });
+// 	fabric_client.setStateStore(state_store);
+// 	var crypto_suite = Fabric_Client.newCryptoSuite();
+// 	var crypto_store = Fabric_Client.newCryptoKeyStore({ path: store_path });
+// 	crypto_suite.setCryptoKeyStore(crypto_store);
+// 	fabric_client.setCryptoSuite(crypto_suite);
+// 	var user_from_store = fabric_client.getUserContext('user1', true);	
+// 	next();
+// };
 
 app.options('*', cors());
 app.use(cors());
@@ -456,7 +463,7 @@ app.get('/api/blockchain', function (req, res) {
 		}
 		return channel.queryInfo(peer);
 	}).then((blockchain) => {
-		console.log('No Of Blocks: '+blockchain.height.low);
+		console.log('No Of Blocks: ' + blockchain.height.low);
 		res.status(200).json(blockchain);
 	}).catch(function (err) {
 		res.status(500).json({ error: err.toString() })
@@ -487,7 +494,7 @@ app.get('/api/block', function (req, res) {
 		}
 		return channel.queryBlockByTxID(req.query.txid);
 	}).then((block) => {
-		console.log('Block Number:'+block.header.number+", No Of Transactions: "+block.data.data.length);
+		console.log('Block Number:' + block.header.number + ", No Of Transactions: " + block.data.data.length);
 		res.status(200).json(block);
 	}).catch(function (err) {
 		res.status(500).json({ error: err.toString() })
@@ -523,34 +530,7 @@ app.get('/api/trans', function (req, res) {
 		});
 	});
 });
-// app.get('/api/trans', asyncHandler((req, res) => {
-// 	setupUser(Fabric_Client).then(valid => {
-// 		if (valid) {
-// 			channel.queryTransaction(req.query.txid).then((trans) => {
-// 				console.log(trans.toString('utf8'));
-// 				res.status(200).json(trans);
-// 			}).catch(function (err) {
-// 				res.status(500).json({ error: err.toString() })
-// 			});
-// 		}
-// 	});
-// }));
 
-// const asyncHandler = fn => (req, res, next) =>
-//   Promise
-//     .resolve(fn(setupUser(req, res, next)))
-// 	.catch(next);
-
-async function setupUser() {
-	return Fabric_Client.newDefaultKeyValueStore({ path: store_path }).then((state_store) => {
-		Fabric_Client.setStateStore(state_store);
-		var crypto_suite = Fabric_Client.newCryptoSuite();
-		var crypto_store = Fabric_Client.newCryptoKeyStore({ path: store_path });
-		crypto_suite.setCryptoKeyStore(crypto_store);
-		client.setCryptoSuite(crypto_suite);
-		return client.getUserContext('user1', true);
-	});
-}
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
 
