@@ -301,5 +301,3 @@ func main() {
 		fmt.Printf("Error creating new Smart Contract: %s", err)
 	}
 }
-
-//"[{\"TxId\":\"f1d694a622e873ecd11e9f52532a65a6ba194e6e372f5e0af868d1e4824cb2c2\"{\"make\":\"Toyota\",\"model\":\"Prius\",\"colour\":\"blue\",\"owner\":\"Tomoko\"},\"Timestamp\":\"seconds:1546229791 nanos:756473800 \",\"IsDelete\":\"false\"},{\"TxId\":\"69798ba5358069316a74c2b2955c0378e5067be6df2ab6494117dfd4dda4d52f\"{\"make\":\"Toyota\",\"model\":\"Prius\",\"colour\":\"blue\",\"owner\":\"Tomoko\"},\"Timestamp\":\"seconds:1546229930 nanos:841000000 \",\"IsDelete\":\"false\"}]"
